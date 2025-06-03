@@ -8,7 +8,7 @@ session_start();
 <head>
 	<meta charset="UTF-8">
 	<?php include "includes/scripts.php"; ?>
-	<title>Sistema Campus & Empresa</title>
+	<title>Sistema TalentoFP</title>
 </head>
 <body>
 	<?php include "includes/header.php"; ?>

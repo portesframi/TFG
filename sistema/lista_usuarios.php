@@ -46,6 +46,7 @@
 			$total_registro = $result_register['total_registro'];
 			$por_pagina = 10;
 
+			// para mostrar la página que se esta consultando, si no hay variable pagina, tendremos la pagina 1.
 			if(empty($_GET['pagina']))
 			{
 				$pagina = 1;				
@@ -54,7 +55,7 @@
 			}
 
 			$desde = ($pagina-1) * $por_pagina;
-			$total_paginas = ceil($total_registro / $por_pagina);
+			$total_paginas = ceil($total_registro / $por_pagina); // ceil, redondea el total paginas para evitar paginas decimales
 
 			$query = mysqli_query($conection,"SELECT u.idusuario, u.nombre, u.correo, u.usuario, r.rol FROM usuario u INNER JOIN rol r ON u.rol = r.idrol WHERE estatus = 1 LIMIT $desde,$por_pagina");
 

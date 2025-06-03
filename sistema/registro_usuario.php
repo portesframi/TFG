@@ -25,9 +25,6 @@
 
 				$query = mysqli_query($conection,"SELECT * FROM usuario WHERE usuario = '$user' OR correo = '$email' ");
 				
-				// ya tenemos el query y cierro de la conexión
-				// mysqli_close($conection);
-
 				$result = mysqli_fetch_array($query);
 
 				if($result > 0){

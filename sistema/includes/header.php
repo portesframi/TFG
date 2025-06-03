@@ -9,7 +9,7 @@
 	<header>
 		<div class="header">
 			
-			<h1>Bienvenido a Campus & Empresa</h1>
+			<h1>Bienvenido a Talento FP</h1>
 			<div class="optionsBar">
 				<p><?php echo fechaC(); ?></p>
 				<span></span>

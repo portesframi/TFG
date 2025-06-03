@@ -35,7 +35,7 @@
 				}
 
 				if($result > 0){
-					$alert='<p class="msg_error">El DNI ya existen.</p>';
+					$alert='<p class="msg_error">El DNI ya existe.</p>';
 				}else{
 					$query_insert = mysqli_query($conection,"INSERT INTO alumno(alumno,dni,telefono,correo,Formacion_de_practicas,Otra_Formacion,Mas_Formacion,Nivel_de_ingles,Habilidades,Vehiculo_propio,Observaciones,usuario_id) VALUES('$nombre','$dni','$telefono','$email','$Formacion_de_practicas','$Otra_Formacion','$Mas_Formacion','$Nivel_de_ingles','$Habilidades','$Vehiculo_propio','$Observaciones','$usuario_id')");
 				

@@ -5,5 +5,4 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/icons.js"></script>
 	<script type="text/javascript" src="js/registro_practica.js"></script>
-	<script type="text/javascript" src="js/buscar_curso.js"></script>
 	<?php include "functions.php"; ?>

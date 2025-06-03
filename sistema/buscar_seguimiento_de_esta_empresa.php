@@ -11,7 +11,7 @@
 		exit();
 	}
 
-	// Obtener el nombre de la empresa para buscar en la tabla seguimiento
+	// Obtener el nombre de la empresa para buscar en la tabla seguimiento empresa
 	$query_empresa = mysqli_query($conection, "SELECT empresa FROM empresa WHERE idempresa = $idempresa LIMIT 1");
 	$data_empresa = mysqli_fetch_assoc($query_empresa);
 	$nombre_empresa = $data_empresa ? $data_empresa['empresa'] : "";
@@ -28,13 +28,13 @@
 	$desde = ($pagina - 1) * $por_pagina;
 
 	// Obtener el total de registros
-	$sql_registe = mysqli_query($conection, "SELECT COUNT(*) as total_registro FROM seguimiento WHERE empresa = '$nombre_empresa' AND estatus = 1");
+	$sql_registe = mysqli_query($conection, "SELECT COUNT(*) as total_registro FROM seguimiento_empresa WHERE empresa = '$nombre_empresa' AND estatus = 1");
 	$result_register = mysqli_fetch_assoc($sql_registe);
 	$total_registro = $result_register['total_registro'];
 	$total_paginas = ceil($total_registro / $por_pagina);
 
 	// Obtener los seguimientos de la empresa seleccionada con paginación
-	$query = mysqli_query($conection, "SELECT * FROM seguimiento WHERE empresa = '$nombre_empresa' AND estatus = 1 ORDER BY fecha_contacto DESC LIMIT $desde, $por_pagina");
+	$query = mysqli_query($conection, "SELECT * FROM seguimiento_empresa WHERE empresa = '$nombre_empresa' AND estatus = 1 ORDER BY fecha_contacto DESC LIMIT $desde, $por_pagina");
 
 	mysqli_close($conection);
 ?>
@@ -75,8 +75,11 @@
 				<td><?php echo htmlspecialchars($data["ciclo"]); ?></td>
 				<td>
 					<a class="link_edit" href="editar_seguimiento_empresa.php?id=<?php echo $data['idseguimiento']; ?>">Editar</a>
+
+					<?php if ($_SESSION['rol'] == 1) { ?>
 					|
 					<a class="link_delete" href="eliminar_seguimiento_empresa.php?id=<?php echo $data['idseguimiento']; ?>">Eliminar</a>
+					<?php } ?>
 				</td>
 			</tr>
 			<?php

@@ -324,7 +324,7 @@ table td{
 	background: #428bca;
 	border: 1px solid #428bca;
 }
-/****** Buscador******/
+/****** BUscador******/
 .form_search{
 	display: -webkit-flex;
 	display: -moz-flex;
@@ -343,18 +343,4 @@ table td{
 	border: 0;
 	cursor: pointer;
 	margin-left: 10px;
-}
-.form_filter{
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
-	float: right;
-	background: initial;
-	padding: 10px;
-	border-radius: 10px;
-}
-.form_container form {
-	display: inline-block;
 }

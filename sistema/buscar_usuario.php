@@ -22,7 +22,7 @@
 	<section id="container">
 
 		<?php
-			$busqueda = strtolower($_REQUEST['busqueda']);
+			$busqueda = strtolower($_REQUEST['busqueda']); // strtolower convierte en minusculas la cadenaa introducida en el buscador
 			if (empty($busqueda)) 
 			{
 				header("location: lista_usuarios.php");
@@ -56,11 +56,11 @@
 			{
 				$rol = " OR rol LIKE '%1%' ";
 
-			}else if($busqueda == 'supervisor'){
+			}else if($busqueda == 'ciclos'){
 
 				$rol = " OR rol LIKE '%2%' ";
 
-			}else if($busqueda == 'profesor'){
+			}else if($busqueda == 'labora'){
 
 				$rol = " OR rol LIKE '%3%' ";
 			}

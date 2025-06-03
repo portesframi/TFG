@@ -10,6 +10,7 @@
 					<ul>
 						<li><a href="registro_usuario.php">Nuevo Usuario</a></li>
 						<li><a href="lista_usuarios.php">Lista de Usuarios</a></li>
+						<li><a href="estadisticas_usuarios.php">Estadisticas de Usuarios</a></li>
 					</ul>
 				</li>
 			<?php } ?>
@@ -18,6 +19,7 @@
 					<ul>
 						<li><a href="registro_empresa.php">Nueva Empresa</a></li>
 						<li><a href="lista_empresas.php">Lista de Empresas</a></li>
+						<li><a href="estadisticas_empresas.php">Estadisticas de Empresas</a></li>
 					</ul>
 				</li>
 				<li class="principal">
