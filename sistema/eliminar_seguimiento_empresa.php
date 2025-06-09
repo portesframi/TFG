@@ -15,7 +15,7 @@
 		}
 		$idseguimiento = $_POST['idseguimiento'];
 
-		$query_delete = mysqli_query($conection,"UPDATE seguimiento_empresa SET estatus = 0 WHERE idseguimiento= $idseguimiento"); // para desactivar usuarios sin eliminar.
+		$query_delete = mysqli_query($conection,"UPDATE seguimiento SET estatus = 0 WHERE idseguimiento= $idseguimiento"); // para desactivar usuarios sin eliminar.
 		mysqli_close($conection);
 		if($query_delete) {
 			header("Location: lista_seguimientos_empresas.php");
@@ -33,7 +33,7 @@
 
 		$idseguimiento = $_REQUEST['id'];
 
-		$query = mysqli_query($conection,"SELECT * FROM seguimiento_empresa WHERE idseguimiento = $idseguimiento");
+		$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento AND practica=0");
 
 		mysqli_close($conection);
 

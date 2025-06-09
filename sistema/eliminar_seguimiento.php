@@ -33,7 +33,7 @@
 
 		$idseguimiento = $_REQUEST['id'];
 
-		$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento");
+		$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento AND practica=1");
 
 		mysqli_close($conection);
 

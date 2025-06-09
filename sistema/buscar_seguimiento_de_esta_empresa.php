@@ -74,9 +74,9 @@
 				<td><?php echo htmlspecialchars($data["tipo_practica"]); ?></td>
 				<td><?php echo htmlspecialchars($data["ciclo"]); ?></td>
 				<td>
-					<a class="link_edit" href="editar_seguimiento_empresa.php?id=<?php echo $data['idseguimiento']; ?>">Editar</a>
+					<a class="link_edit" href="<?php echo ($data["ciclo"]==null)?'editar_seguimiento.php':'editar_seguimiento_empresa.php' ?>?id=<?php echo $data['idseguimiento']; ?>">Editar</a>
 					|
-					<a class="link_delete" href="eliminar_seguimiento_empresa.php?id=<?php echo $data['idseguimiento']; ?>">Eliminar</a>
+					<a class="link_delete" href="<?php echo ($data["ciclo"]==null)?'eliminar_seguimiento.php':'eliminar_seguimiento_empresa.php' ?>?id=<?php echo $data['idseguimiento']; ?>">Eliminar</a>
 				</td>
 			</tr>
 			<?php

@@ -20,7 +20,25 @@
 		<a href="registro_practica.php" class="btn_new">Nueva práctica</a>
 		
 		<form action="buscar_practica.php" method="get" class="form_search">
-			<input type="text" name="busqueda" id="busqueda" placeholder="Buscar">
+			<?php
+				$query_curso = mysqli_query($conection,"SELECT * FROM cursos WHERE estatus = 1 ORDER BY curso ASC");
+				$result_curso = mysqli_num_rows($query_curso);
+			?>
+
+			<select name="curso" id="search_curso">
+				<option value="Todos" selected>Todos</option>
+				<?php
+					if($result_curso > 0){
+						while ($curso = mysqli_fetch_array($query_curso)) {
+				?>
+						<option value="<?php echo $curso['curso']; ?>"><?php echo $curso['curso']; ?></option>
+				<?php
+						}
+					}
+			    ?>                         
+			</select>
+
+				<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
@@ -34,27 +52,7 @@
 				<th>Dedicación</th>
 				<th>Tareas</th>
 				<th>Tipo de práctica</th>
-				<th>Curso
-				<?php
-					$query_curso = mysqli_query($conection,"SELECT * FROM cursos WHERE estatus = 1 ORDER BY curso ASC");
-
-					$result_curso = mysqli_num_rows($query_curso);
-				?>
-				<select name="curso" id="search_curso">
-				<option value="" selected>Todos</option>
-				<?php
-
-					if($result_curso > 0){
-						while ($curso = mysqli_fetch_array($query_curso)) {
-							
-				?>
-					<option><?php echo $curso['curso']; ?></option>
-				<?php
-						}
-					}
-			    ?>                         
-				</select>
-				</th>
+				<th>Curso</th>
 				<th>Formación de prácticas</th>
 				<th>Fecha inicio</th>
 				<th>Fecha fin</th>

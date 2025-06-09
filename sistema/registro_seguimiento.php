@@ -15,10 +15,11 @@
 			$Formacion_de_practicas	= $_POST['Formacion_de_practicas'];
 			$comentario				= $_POST['comentario'];
 			$usuario_id 			= $_SESSION['idUser'];
-
+			$visita					= isset($_POST['visita']) ? 1 : 0;
+			
 			$result = 0;
 
-			$query_insert = mysqli_query($conection,"INSERT INTO seguimiento(empresa,alumno,fecha_contacto,profesor,curso,Formacion_de_practicas,comentario,usuario_id) VALUES('$empresa','$alumno','$fecha_contacto','$profesor','$curso','$Formacion_de_practicas','$comentario','$usuario_id')");
+			$query_insert = mysqli_query($conection,"INSERT INTO seguimiento(empresa,alumno,fecha_contacto,profesor,curso,Formacion_de_practicas,comentario,usuario_id, visita, practica) VALUES('$empresa','$alumno','$fecha_contacto','$profesor','$curso','$Formacion_de_practicas','$comentario','$usuario_id',$visita,1)");
 
 			if($query_insert){
 				$alert='<p class="msg_save">Seguimiento de práctica creado correctamente.</p>';
@@ -158,6 +159,12 @@
 				<div class="wd30">
 				    <label for="comentario">Comentarios</label>
 				    <textarea id="comentario" name="comentario" rows="10" cols="50" required></textarea>
+				</div>
+
+				<div class="wd30">
+				    <label for="visita">Visita</label>
+					    <input type="checkbox" name="visita" value="1">
+  					</label>
 				</div>
 				
 				<div class="wd100">

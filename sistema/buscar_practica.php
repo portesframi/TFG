@@ -19,19 +19,36 @@
 
 		<?php
 			$busqueda = strtolower($_REQUEST['busqueda']);
-			if (empty($busqueda)) 
-			{
+			$cursoBusqueda = urldecode($_REQUEST['curso']);
+			if (($busqueda=="")&&($cursoBusqueda=="")) {
 				header("location: lista_practicas.php");
 				mysqli_close($conection);
 			}
-
 		?>
 
 		<h1>Lista de prácticas</h1>
 		<a href="registro_practica.php" class="btn_new">Nueva practica</a>
 		
 		<form action="buscar_practica.php" method="get" class="form_search">
-			<input type="text" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
+			<?php
+				$query_curso = mysqli_query($conection,"SELECT * FROM cursos WHERE estatus = 1 ORDER BY curso ASC");
+				$result_curso = mysqli_num_rows($query_curso);
+			?>
+
+			<select name="curso" id="search_curso">
+				<option value="Todos" selected>Todos</option>
+				<?php
+					if($result_curso > 0){
+						while ($curso = mysqli_fetch_array($query_curso)) {
+				?>
+						<option value="<?php echo $curso['curso']; ?>" <?php echo ($curso['curso']==$cursoBusqueda)?'selected':''; ?>><?php echo $curso['curso']; ?></option>
+				<?php
+						}
+					}
+			    ?>                         
+			</select>
+
+			<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
@@ -56,6 +73,9 @@
 			</tr>
 		<?php
 			// Paginador
+			if($cursoBusqueda=="Todos"){
+				$cursoBusqueda="";
+			}
 
 			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM practica 
 										WHERE (idpractica LIKE '%$busqueda%' OR 
@@ -75,12 +95,12 @@
 												dni_instructor LIKE '%$busqueda%' OR
 												correo_instructor LIKE '%$busqueda%' OR 
 												telefono_instructor LIKE '%$busqueda%' ) 
-										AND estatus = 1");
+										AND estatus = 1 AND curso LIKE '%$cursoBusqueda%'");
 
 			$result_register = mysqli_fetch_array($sql_registe);
 			$total_registro = $result_register['total_registro'];
 
-			echo "<strong>Registros encontrados:</strong> " . $total_registro;
+			echo "<span>Prácticas encontradas:</span> " . $total_registro;
 			
 			$por_pagina = 20;
 
@@ -108,9 +128,9 @@
 												fecha_fin LIKE '%$busqueda%' OR
 												horas LIKE '%$busqueda%' OR
 												horario LIKE '%$busqueda%' OR 
-												instructor LIKE '%$busqueda%' ) 
-											AND
-											estatus = 1 ORDER BY fecha_inicio ASC LIMIT $desde,$por_pagina ");
+												instructor LIKE '%$busqueda%') 
+											AND estatus = 1 AND curso LIKE '%$cursoBusqueda%' 
+											ORDER BY fecha_inicio ASC LIMIT $desde,$por_pagina ");
 
 			mysqli_close($conection);
 			$result = mysqli_num_rows($query);
@@ -153,7 +173,9 @@
 <?php
 	if($total_registro != 0)
 	{
-
+		if($curso=="") {
+			$curso="Todos";
+		}
 ?>
 		<div class="paginador">
 			<ul>
@@ -161,8 +183,8 @@
 				if ($pagina != 1)
 				{
 			?>
-				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>">|<</a></li>
-				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>"><<</a></li>
+				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>&curso=<?php echo $cursoBusqueda; ?>">|<</a></li>
+				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>&curso=<?php echo $cursoBusqueda; ?>"><<</a></li>
 			<?php
 				}
 				for ($i=1; $i <= $total_paginas; $i++) {
@@ -170,14 +192,14 @@
 					{
 						echo '<li class="pageSelected">'.$i.'</li>';
 					}else{
-						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'">'.$i.'</a></li>';
+						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'&curso='.$cursoBusqueda.'">'.$i.'</a></li>';
 					}
 				}
 				if ($pagina != $total_paginas) 
 				{	
 			?>
-				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>">>></a></li>
-				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>">>|</a></li>
+				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>&curso=<?php echo $cursoBusqueda; ?>">>></a></li>
+				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>&curso=<?php echo $cursoBusqueda; ?>">>|</a></li>
 			<?php } ?>
 			</ul>
 		</div>

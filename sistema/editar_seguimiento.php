@@ -16,11 +16,13 @@
 			$Formacion_de_practicas	= $_POST['Formacion_de_practicas'];
 			$comentario				= $_POST['comentario'];
 			$usuario_id 			= $_SESSION['idUser'];
+			$visita			= isset($_POST['visita']) ? 1 : 0;
+			
 
 			$result = 0;
 
 			$sql_update = mysqli_query($conection,"UPDATE seguimiento
-															SET empresa='$empresa', alumno='$alumno', fecha_contacto='$fecha_contacto', profesor='$profesor', curso='$curso', Formacion_de_practicas='$Formacion_de_practicas', comentario='$comentario',usuario_id='$usuario_id'
+															SET empresa='$empresa', alumno='$alumno', fecha_contacto='$fecha_contacto', profesor='$profesor', curso='$curso', Formacion_de_practicas='$Formacion_de_practicas', comentario='$comentario',usuario_id='$usuario_id', visita=$visita 
 															WHERE idseguimiento= $idSeguimiento ");
 
 			if($sql_update){
@@ -40,7 +42,7 @@
 	}
 	$idseguimiento  = $_REQUEST['id'];
 
-	$sql = mysqli_query($conection, "SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento and estatus = 1");
+	$sql = mysqli_query($conection, "SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento and estatus = 1 AND practica=1");
 	// cierre de la conexión
 	mysqli_close($conection);
 	$result_sql = mysqli_num_rows($sql);
@@ -57,7 +59,8 @@
 			$profesor 				= $data['profesor'];
 			$curso 					= $data['curso'];
 			$Formacion_de_practicas = $data['Formacion_de_practicas'];
-			$comentario 			= $data['comentario'];						
+			$comentario 			= $data['comentario'];		
+			$visita					= $data['visita'];				
 		}
 	}
 
@@ -128,7 +131,13 @@
 				<label for="comentario">Comentarios</label>
     			<textarea id="comentario" name="comentario" rows="10" cols="150"><?php echo htmlspecialchars($comentario); ?></textarea>
 				</p>
-				
+
+				<div class="wd30">
+				    <label for="visita">Visita</label>
+					<input type="checkbox" name="visita" value="1" <?php if ($visita) echo 'checked'; ?>>
+  					</label>
+				</div>
+
 				<input type="submit" value="Actualizar seguimiento" class="btn_save">
 
 

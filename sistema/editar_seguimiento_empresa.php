@@ -14,16 +14,14 @@
 			$tipo_practica 			= $_POST['tipo_practica'];
 			$ciclo		 			= $_POST['ciclo'];
 			$sector					= $_POST['sector'];
-			$convenio_firmado 		= $_POST['convenio_firmado'];
-			$fecha_firma_convenio	= $_POST['fecha_firma_convenio'];
 			$medio		 			= $_POST['medio'];
 			$comentario				= $_POST['comentario'];
 			$usuario_id 			= $_SESSION['idUser'];
 
 			$result = 0;
 
-			$sql_update = mysqli_query($conection,"UPDATE seguimiento_empresa
-															SET empresa='$empresa', fecha_contacto='$fecha_contacto', profesor='$profesor', tipo_practica='$tipo_practica', ciclo='$ciclo', sector='$sector', convenio_firmado='$convenio_firmado', fecha_firma_convenio='$fecha_firma_convenio', medio='$medio', comentario='$comentario',usuario_id='$usuario_id'
+			$sql_update = mysqli_query($conection,"UPDATE seguimiento
+															SET empresa='$empresa', fecha_contacto='$fecha_contacto', profesor='$profesor', tipo_practica='$tipo_practica', ciclo='$ciclo', sector='$sector', medio='$medio', comentario='$comentario',usuario_id='$usuario_id'
 															WHERE idseguimiento= $idSeguimiento ");
 
 			if($sql_update){
@@ -43,7 +41,7 @@
 	}
 	$idseguimiento  = $_REQUEST['id'];
 
-	$sql = mysqli_query($conection, "SELECT * FROM seguimiento_empresa WHERE idseguimiento = $idseguimiento and estatus = 1");
+	$sql = mysqli_query($conection, "SELECT * FROM seguimiento WHERE idseguimiento = $idseguimiento and estatus = 1 AND practica=0");
 	// cierre de la conexión
 	mysqli_close($conection);
 	$result_sql = mysqli_num_rows($sql);
@@ -60,8 +58,6 @@
 			$tipo_practica 			= $data['tipo_practica'];
 			$ciclo		 			= $data['ciclo'];
 			$sector					= $data['sector'];
-			$convenio_firmado 		= $data['convenio_firmado'];
-			$fecha_firma_convenio	= $data['fecha_firma_convenio'];
 			$medio		 			= $data['medio'];
 			$comentario 			= $data['comentario'];	
 
@@ -101,7 +97,7 @@
 				<p>				
 				<div class="wd30">
 					<label for="tipo_practica">Tipo de práctica</label>
-					<select style="width:250px" name="tipo_practica" id="tipo_practica" 
+					<select style="width:250px" name="tipo_practica" id="tipo_practica">
 						<option value="" <?php if($tipo_practica == "") echo 'selected'; ?>></option>
 						<option value="FCT" <?php if($tipo_practica == "FCT") echo 'selected'; ?>>FCT</option>
 						<option value="DUAL" <?php if($tipo_practica == "DUAL") echo 'selected'; ?>>DUAL</option>
@@ -111,7 +107,7 @@
 				</div>
 				<div class="wd30">
 					<label for="ciclo">Ciclo relacionado</label>
-					<select style="width:250px" name="ciclo" id="ciclo" 
+					<select style="width:250px" name="ciclo" id="ciclo"> 
 						<option value="" <?php if($ciclo == "") echo 'selected'; ?>></option>
 						<option value="FPB" <?php if($ciclo == "FPB") echo 'selected'; ?>>FPB</option>
 						<option value="SMR" <?php if($ciclo == "SMR") echo 'selected'; ?>>SMR</option>
@@ -119,19 +115,6 @@
 						<option value="DAM" <?php if($ciclo == "DAM") echo 'selected'; ?>>DAM</option>
 						<option value="DAW" <?php if($ciclo == "DAW") echo 'selected'; ?>>DAW</option>
 					</select>
-				</div>
-				<div class="wd30">
-    				<label for="convenio_firmado">Convenio firmado</label>
-    				<select name="convenio_firmado" id="convenio_firmado">
-        				<option value="" <?php if($convenio_firmado == "") echo 'selected'; ?>></option>
-        				<option value="SI" <?php if($convenio_firmado == "SI") echo 'selected'; ?>>SI</option>
-        				<option value="NO" <?php if($convenio_firmado == "NO") echo 'selected'; ?>>NO</option>
-    				</select>
-				</div>
-
-				<div class="wd30">
-					<label for="fecha_firma_convenio">Fecha firma</label>
-					<input type="date" name="fecha_firma_convenio" id="fecha_firma_convenio" value="<?php echo $fecha_firma_convenio; ?>">
 				</div>
 				</p>
 				<p>	

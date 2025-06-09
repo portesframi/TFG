@@ -25,10 +25,14 @@
 			$correo_instructor		= $_POST['correo_instructor'];
 			$telefono_instructor	= $_POST['telefono_instructor'];
 			$usuario_id 			= $_SESSION['idUser'];
+			$anexo1					= isset($_POST['anexo1']) ? 1 : 0;
+			$anexo2					= isset($_POST['anexo2']) ? 1 : 0;
+			$anexo3					= isset($_POST['anexo3']) ? 1 : 0;
+			$anexo5					= isset($_POST['anexo5']) ? 1 : 0;
 
 			$result = 0;
 
-			$query_insert = mysqli_query($conection,"INSERT INTO practica(empresa,alumno,distancia,dedicacion,tarea,tipo_practica,curso,Formacion_de_practicas,fecha_inicio,fecha_fin,horas,horario,instructor,dni_instructor,titulacion_instructor,correo_instructor,telefono_instructor,usuario_id) VALUES('$empresa','$alumno','$distancia','$dedicacion','$tarea','$tipo_practica','$curso','$Formacion_de_practicas','$fecha_inicio','$fecha_fin','$horas','$horario','$instructor','$dni_instructor','$titulacion_instructor','$correo_instructor','$telefono_instructor','$usuario_id')");
+			$query_insert = mysqli_query($conection,"INSERT INTO practica(empresa,alumno,distancia,dedicacion,tarea,tipo_practica,curso,Formacion_de_practicas,fecha_inicio,fecha_fin,horas,horario,instructor,dni_instructor,titulacion_instructor,correo_instructor,telefono_instructor,usuario_id,anexo1, anexo2, anexo3, anexo5) VALUES('$empresa','$alumno','$distancia','$dedicacion','$tarea','$tipo_practica','$curso','$Formacion_de_practicas','$fecha_inicio','$fecha_fin','$horas','$horario','$instructor','$dni_instructor','$titulacion_instructor','$correo_instructor','$telefono_instructor','$usuario_id',$anexo1,$anexo2,$anexo3,$anexo5)");
 
 			if($query_insert){
 				$alert='<p class="msg_save">Práctica creada correctamente.</p>';
@@ -254,6 +258,17 @@
 				<div class="wd30">
 					<label for="telefono_instructor">Teléfono del instructor</label>
 					<input type="number" name="telefono_instructor" id="telefono_instructor" placeholder="Teléfono">
+				</div>
+
+				<div class="wd100">
+					<label for="Anexo1">Anexo 1</label>
+					<input type="checkbox" name="anexo1" id="anexo_1" value="1">
+					<label style="margin-left: 30px;" for="Anexo2">Anexo 2</label>
+					<input type="checkbox" name="anexo2" id="anexo_2" value="1">
+					<label style="margin-left: 30px;" for="Anexo3">Anexo 3</label>
+					<input type="checkbox" name="anexo3" id="anexo_3" value="1">
+					<label style="margin-left: 30px;" for="Anexo5">Anexo 5</label>
+					<input type="checkbox" name="anexo5" id="anexo_5" value="1">
 				</div>
 
 				<div class="wd100">

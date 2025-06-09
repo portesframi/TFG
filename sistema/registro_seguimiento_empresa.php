@@ -13,15 +13,13 @@
 			$tipo_practica 			= $_POST['tipo_practica'];
 			$ciclo		 			= $_POST['ciclo'];
 			$sector					= $_POST['sector'];
-			$convenio_firmado 		= $_POST['convenio_firmado'];
-			$fecha_firma_convenio	= $_POST['fecha_firma_convenio'];
 			$medio					= $_POST['medio'];
 			$comentario				= $_POST['comentario'];
 			$usuario_id 			= $_SESSION['idUser'];
 
 			$result = 0;
 
-			$query_insert = mysqli_query($conection,"INSERT INTO seguimiento_empresa(empresa,fecha_contacto,profesor,comentario,tipo_practica,ciclo,sector,convenio_firmado,fecha_firma_convenio,medio,usuario_id) VALUES('$empresa','$fecha_contacto','$profesor','$comentario','$tipo_practica','$ciclo','$sector','$convenio_firmado','$fecha_firma_convenio','$medio','$usuario_id')");
+			$query_insert = mysqli_query($conection,"INSERT INTO seguimiento(empresa,fecha_contacto,profesor,comentario,tipo_practica,ciclo,sector,medio,usuario_id,practica) VALUES('$empresa','$fecha_contacto','$profesor','$comentario','$tipo_practica','$ciclo','$sector','$medio','$usuario_id',0)");
 
 			if($query_insert){
 				$alert='<p class="msg_save">Seguimiento de la empresa creado correctamente.</p>';
@@ -125,19 +123,6 @@
 						<option value="DAW">DAW</option>
 					</select>
 				</div>
-				<div class="wd30">
-					<label for="convenio_firmado">Convenio firmado</label>
-					<select name="convenio_firmado" id="convenio_firmado">
-						<option value=""></option>
-						<option value="SI">SI</option>
-						<option value="NO">NO</option>
-					</select>
-				</div>
-				<div class="wd30">
-					<label for="fecha_firma_convenio">Fecha firma</label>
-					<input type="date" name="fecha_firma_convenio" id="fecha_firma_convenio">
-				</div>
-				</p>
 				<p>	
 					<label for="sector">Sector empresarial</label>
 					<input type="text" size="150" maxlength="200" name="sector" id="sector" placeholder="Sector empresarial">

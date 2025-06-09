@@ -1,51 +1,49 @@
 <?php
 	session_start();
+	if ($_SESSION['rol'] != 1)
+	{
+	header("location: ./");
+	}
 	
 	include "../conexion.php";
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<?php include "includes/scripts.php"; ?>
-	<title>Listado de seguimientos de las empresas</title>
+	<title>Lista de usuarios</title>
 </head>
 <body>
 	<?php include "includes/header.php"; ?>
 	<section id="container">
-
-		<h1>Listado de seguimientos empresas</h1>
-		<a href="registro_seguimiento_empresa.php" class="btn_new">Nuevo seguimiento empresa</a>
-		
-		<form action="buscar_seguimiento_empresa.php" method="get" class="form_search">
+		<h1>Lista de usuarios</h1>
+		<a href="registro_usuario.php" class="btn_new">Nuevo usuario</a>
+		<form action="estadisticas_buscar_usuario.php" method="get" class="form_search">
 			<label for="desde" style="margin-left: 20px;">Inicio: </label><input  style="margin-left: 10px;" type="date" name="inicio">
 			<label for="hasta" style="margin-left: 20px;">Fin: </label><input  style="margin-left: 10px;" type="date" name="fin">
 			<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
-
 		<table>
 			<tr>
 				<th>ID</th>
-				<th>Nombre empresa</th>
-				<th>Fecha de contacto</th>
-				<th>Profesor</th>
-				<th>Comentarios</th>
-				<th>Tipo de práctica</th>
-				<th>Ciclo relacionado</th>
-				<th>Sector</th>
-				<th>Medio de contacto</th>				
-				<th>Acciones</th>
+				<th>Nombre</th>
+				<th>Correo</th>
+				<th>Usuario</th>
+				<th>Rol</th>
+				<th>Seguimientos</th>
 			</tr>
 		<?php
 			// Paginador
-			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento WHERE estatus = 1 AND practica=0");
-			$result_register = mysqli_fetch_array($sql_registe);
-			$total_registro = $result_register['total_registro'];
-			$por_pagina = 20;
+			$sql_registe = mysqli_query($conection,"SELECT u.idusuario, u.nombre, u.correo, u.usuario, r.rol, COUNT(s.idseguimiento) AS total_seguimientos FROM usuario u INNER JOIN rol r ON u.rol = r.idrol
+			 LEFT JOIN seguimiento s ON u.idusuario = s.usuario_id AND s.estatus = 1 WHERE u.estatus = 1 GROUP BY u.idusuario, u.nombre, u.correo, u.usuario, r.rol ORDER BY u.nombre");
+			$total_registro = mysqli_num_rows($sql_registe);;
+			$por_pagina = 10;
 
 			if(empty($_GET['pagina']))
 			{
@@ -57,7 +55,8 @@
 			$desde = ($pagina-1) * $por_pagina;
 			$total_paginas = ceil($total_registro / $por_pagina);
 
-			$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE estatus = 1 AND practica=0 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina");
+			$query = mysqli_query($conection,"SELECT u.idusuario, u.nombre, u.correo, u.usuario, r.rol, COUNT(s.idseguimiento) AS total_seguimientos FROM usuario u INNER JOIN rol r ON u.rol = r.idrol
+			 LEFT JOIN seguimiento s ON u.idusuario = s.usuario_id AND s.estatus = 1 WHERE u.estatus = 1 GROUP BY u.idusuario, u.nombre, u.correo, u.usuario, r.rol ORDER BY u.nombre LIMIT $desde, $por_pagina;");
 
 			// cierre de la conexión
 			mysqli_close($conection);
@@ -66,29 +65,14 @@
 			if($result > 0){
 				while ($data = mysqli_fetch_array($query)){
 
-					$formato = 'Y-m-d H:i:s';
-					$fecha = DateTime::createFromFormat($formato,$data["dateadd"])
-
 			?>
 				<tr>
-					<td><?php echo $data["idseguimiento"] ?></td>
-					<td><?php echo $data["empresa"] ?></td>
-					<td><?php echo $data["fecha_contacto"] ?></td>
-					<td><?php echo $data["profesor"] ?></td>
-					<td><?php echo $data["comentario"] ?></td>
-					<td><?php echo $data["tipo_practica"] ?></td>
-					<td><?php echo $data["ciclo"] ?></td>
-					<td><?php echo $data["sector"] ?></td>
-					<td><?php echo $data["medio"] ?></td>
-
-					<td>
-						<a class="link_edit" href="editar_seguimiento_empresa.php?id=<?php echo $data["idseguimiento"] ?>">Editar</a>
-
-					<?php if ($_SESSION['rol'] == 1) { ?>
-						|
-						<a class="link_delete" href="eliminar_seguimiento_empresa.php?id=<?php echo $data["idseguimiento"] ?>">Eliminar</a>
-					<?php } ?>
-					</td>
+					<td><?php echo $data["idusuario"] ?></td>
+					<td><?php echo $data["nombre"] ?></td>
+					<td><?php echo $data["correo"] ?></td>
+					<td><?php echo $data["usuario"] ?></td>
+					<td><?php echo $data["rol"] ?></td>
+					<td><?php echo $data["total_seguimientos"] ?></td>
 				</tr>
 		<?php
 				}

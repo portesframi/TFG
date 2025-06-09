@@ -11,7 +11,7 @@
 <head>
 	<meta charset="UTF-8">
 	<?php include "includes/scripts.php"; ?>
-	<title>Lista de Seguimientos</title>
+	<title>Lista de Seguimientos de Prácticas</title>
 </head>
 <body>
 	<?php include "includes/header.php"; ?>
@@ -19,7 +19,9 @@
 
 		<?php
 			$busqueda = strtolower($_REQUEST['busqueda']);
-			if (empty($busqueda)) 
+			$inicio = $_REQUEST['inicio']; 
+			$fin = $_REQUEST['fin'];
+			if (($busqueda=="") && ($inicio=="") && ($fin=="")) 
 			{
 				header("location: lista_seguimientos.php");
 				mysqli_close($conection);
@@ -27,11 +29,13 @@
 
 		?>
 
-		<h1>Lista de seguimientos de prácticas</h1>
+		<h1>Listado de seguimientos de prácticas</h1>
 		<a href="registro_seguimiento.php" class="btn_new">Nuevo seguimiento de prácticas</a>
 		
 		<form action="buscar_seguimiento.php" method="get" class="form_search">
-			<input type="text" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
+		<label for="desde" style="margin-left: 20px;">Inicio: </label><input  style="margin-left: 10px;" type="date" name="inicio" value="<?php echo $inicio ?>">
+			<label for="hasta" style="margin-left: 20px;">Fin: </label><input  style="margin-left: 10px;" type="date" name="fin"  value="<?php echo $fin ?>">
+			<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
@@ -50,6 +54,13 @@
 			</tr>
 		<?php
 			// Paginador
+			if($inicio==""){
+				$inicio='1970-01-01';
+			}
+
+			if($fin==""){
+				$fin = date('Y-m-d');
+			}
 
 			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento 
 										WHERE (idseguimiento LIKE '%$busqueda%' OR 
@@ -60,7 +71,8 @@
 												curso LIKE '%$busqueda%' OR
 												Formacion_de_practicas LIKE '%$busqueda%' OR
 												comentario LIKE '%$busqueda%') 
-										AND estatus = 1");
+												AND fecha_contacto BETWEEN '$inicio' AND '$fin'  
+												AND estatus = 1 AND practica=1");
 
 			$result_register = mysqli_fetch_array($sql_registe);
 			$total_registro = $result_register['total_registro'];
@@ -85,8 +97,8 @@
 												curso LIKE '%$busqueda%' OR
 												Formacion_de_practicas LIKE '%$busqueda%' OR
 												comentario LIKE '%$busqueda%') 
-											AND
-											estatus = 1 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina ");
+												AND fecha_contacto BETWEEN '$inicio' AND '$fin' 
+												AND estatus = 1 AND practica=1 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina ");
 
 			mysqli_close($conection);
 			$result = mysqli_num_rows($query);
@@ -131,8 +143,8 @@
 				if ($pagina != 1)
 				{
 			?>
-				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>">|<</a></li>
-				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>"><<</a></li>
+				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">|<</a></li>
+				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>"><<</a></li>
 			<?php
 				}
 				for ($i=1; $i <= $total_paginas; $i++) {
@@ -140,14 +152,14 @@
 					{
 						echo '<li class="pageSelected">'.$i.'</li>';
 					}else{
-						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'">'.$i.'</a></li>';
+						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'&inicio='.$inicio.'&fin='.$fin.'">'.$i.'</a></li>';
 					}
 				}
 				if ($pagina != $total_paginas) 
 				{	
 			?>
-				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>">>></a></li>
-				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>">>|</a></li>
+				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">>></a></li>
+				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">>|</a></li>
 			<?php } ?>
 			</ul>
 		</div>

@@ -11,7 +11,7 @@
 <head>
 	<meta charset="UTF-8">
 	<?php include "includes/scripts.php"; ?>
-	<title>Lista de Seguimientos de empresa</title>
+	<title>Listado de seguimientos de las empresa</title>
 </head>
 <body>
 	<?php include "includes/header.php"; ?>
@@ -19,7 +19,9 @@
 
 		<?php
 			$busqueda = strtolower($_REQUEST['busqueda']);
-			if (empty($busqueda)) 
+			$inicio = $_REQUEST['inicio']; 
+			$fin = $_REQUEST['fin'];
+			if (($busqueda=="") && ($inicio=="") && ($fin=="")) 
 			{
 				header("location: lista_seguimientos_empresas.php");
 				mysqli_close($conection);
@@ -27,11 +29,13 @@
 
 		?>
 
-		<h1>Lista de seguimientos de empresas</h1>
-		<a href="registro_seguimientos_empresas.php" class="btn_new">Nuevo seguimiento empresa</a>
+		<h1>Listado de seguimientos empresas</h1>
+		<a href="registro_seguimiento_empresa.php" class="btn_new">Nuevo seguimiento empresa</a>
 		
 		<form action="buscar_seguimiento_empresa.php" method="get" class="form_search">
-			<input type="text" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
+			<label for="desde" style="margin-left: 20px;">Inicio: </label><input  style="margin-left: 10px;" type="date" name="inicio" value="<?php echo $inicio ?>">
+			<label for="hasta" style="margin-left: 20px;">Fin: </label><input  style="margin-left: 10px;" type="date" name="fin" value="<?php echo $fin ?>">
+			<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar" value="<?php echo $busqueda; ?>">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
@@ -46,15 +50,20 @@
 				<th>Tipo de práctica</th>
 				<th>Ciclo relacionado</th>
 				<th>Sector</th>
-				<th>Convenio firmado</th>
-				<th>Fecha firma</th>
 				<th>Medio de contacto</th>				
 				<th>Acciones</th>
 			</tr>
 		<?php
 			// Paginador
+			if($inicio==""){
+				$inicio='1970-01-01';
+			}
 
-			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento_empresa 
+			if($fin==""){
+				$fin = date('Y-m-d');
+			}
+			
+			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento 
 										WHERE (idseguimiento LIKE '%$busqueda%' OR 
 												empresa LIKE '%$busqueda%' OR 
 												fecha_contacto LIKE '%$busqueda%' OR
@@ -63,10 +72,9 @@
 												tipo_practica LIKE '%$busqueda%' OR 
 												ciclo LIKE '%$busqueda%' OR
 												sector LIKE '%$busqueda%' OR
-												convenio_firmado LIKE '%$busqueda%' OR
-												medio LIKE '%$busqueda%' OR
-												fecha_firma_convenio LIKE '%$busqueda%') 
-										AND estatus = 1");
+												medio LIKE '%$busqueda%') 
+												AND fecha_contacto BETWEEN '$inicio' AND '$fin'  
+												AND estatus = 1 AND practica=0" );
 
 			$result_register = mysqli_fetch_array($sql_registe);
 			$total_registro = $result_register['total_registro'];
@@ -82,7 +90,7 @@
 			$desde = ($pagina-1) * $por_pagina;
 			$total_paginas = ceil($total_registro / $por_pagina);
 
-			$query = mysqli_query($conection,"SELECT * FROM seguimiento_empresa WHERE 
+			$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE 
 											(idseguimiento LIKE '%$busqueda%' OR 
 												empresa LIKE '%$busqueda%' OR 
 												alumno LIKE '%$busqueda%' OR 
@@ -92,11 +100,9 @@
 												tipo_practica LIKE '%$busqueda%' OR 
 												ciclo LIKE '%$busqueda%' OR
 												sector LIKE '%$busqueda%' OR
-												convenio_firmado LIKE '%$busqueda%' OR
-												medio LIKE '%$busqueda%' OR
-												fecha_firma_convenio LIKE '%$busqueda%') 
-											AND
-											estatus = 1 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina ");
+												medio LIKE '%$busqueda%') 
+												AND fecha_contacto BETWEEN '$inicio' AND '$fin' 
+												AND estatus = 1 AND practica=0 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina ");
 
 			mysqli_close($conection);
 			$result = mysqli_num_rows($query);
@@ -114,8 +120,6 @@
 					<td><?php echo $data["tipo_practica"] ?></td>
 					<td><?php echo $data["ciclo"] ?></td>
 					<td><?php echo $data["sector"] ?></td>
-					<td><?php echo $data["convenio_firmado"] ?></td>
-					<td><?php echo $data["fecha_firma_convenio"] ?></td>
 					<td><?php echo $data["medio"] ?></td>
 					<td>
 						<a class="link_edit" href="editar_seguimiento_empresa.php?id=<?php echo $data["idseguimiento"] ?>">Editar</a>
@@ -144,8 +148,8 @@
 				if ($pagina != 1)
 				{
 			?>
-				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>">|<</a></li>
-				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>"><<</a></li>
+				<li><a href="?pagina=<?php echo 1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">|<</a></li>
+				<li><a href="?pagina=<?php echo $pagina-1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>"><<</a></li>
 			<?php
 				}
 				for ($i=1; $i <= $total_paginas; $i++) {
@@ -153,14 +157,14 @@
 					{
 						echo '<li class="pageSelected">'.$i.'</li>';
 					}else{
-						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'">'.$i.'</a></li>';
+						echo '<li><a href="?pagina='.$i.'&busqueda='.$busqueda.'&inicio='.$inicio.'&fin='.$fin.'">'.$i.'</a></li>';
 					}
 				}
 				if ($pagina != $total_paginas) 
 				{	
 			?>
-				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>">>></a></li>
-				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>">>|</a></li>
+				<li><a href="?pagina=<?php echo $pagina+1; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">>></a></li>
+				<li><a href="?pagina=<?php echo $total_paginas; ?>&busqueda=<?php echo $busqueda; ?>&inicio=<?php echo $inicio; ?>&fin=<?php echo $fin; ?>">>|</a></li>
 			<?php } ?>
 			</ul>
 		</div>

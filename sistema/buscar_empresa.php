@@ -51,6 +51,8 @@
 				<th>Correo del contacto</th>
 				<th>Sector empresarial</th>
 				<th>Origen empresa</th>
+				<th>Acciones</th>
+				
 			</tr>
 		<?php
 			// Paginador
@@ -130,6 +132,8 @@
 					<td><?php echo $data['origen'] ?></td>
 					<td>
 						<a class="link_edit" href="editar_empresa.php?id=<?php echo $data["idempresa"] ?>">Editar</a>
+
+						<a class="link_seguimiento" href="buscar_seguimiento_de_esta_empresa.php?id=<?php echo $data["idempresa"] ?>">Seguimientos</a>
 						
 					<?php if ($_SESSION['rol'] == 1) { ?>
 						|

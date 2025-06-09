@@ -10,17 +10,19 @@
 <head>
 	<meta charset="UTF-8">
 	<?php include "includes/scripts.php"; ?>
-	<title>Listado de seguimientos</title>
+	<title>Listado de seguimientos de Prácticas</title>
 </head>
 <body>
 	<?php include "includes/header.php"; ?>
 	<section id="container">
 
-		<h1>Listado de seguimientos</h1>
+		<h1>Listado de seguimientos de prácticas</h1>
 		<a href="registro_seguimiento.php" class="btn_new">Nuevo seguimiento de práticas</a>
 		
 		<form action="buscar_seguimiento.php" method="get" class="form_search">
-			<input type="text" name="busqueda" id="busqueda" placeholder="Buscar">
+			<label for="desde" style="margin-left: 20px;">Inicio: </label><input  style="margin-left: 10px;" type="date" name="inicio">
+			<label for="hasta" style="margin-left: 20px;">Fin: </label><input  style="margin-left: 10px;" type="date" name="fin">
+			<input type="text" style="margin-left: 30px;" name="busqueda" id="busqueda" placeholder="Buscar">
 			<input type="submit" value="Buscar" class="btn_search">
 		</form>
 
@@ -39,7 +41,7 @@
 			</tr>
 		<?php
 			// Paginador
-			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento WHERE estatus = 1");
+			$sql_registe = mysqli_query($conection,"SELECT count(*) as total_registro FROM seguimiento WHERE estatus = 1 AND practica=1");
 			$result_register = mysqli_fetch_array($sql_registe);
 			$total_registro = $result_register['total_registro'];
 			$por_pagina = 20;
@@ -54,7 +56,7 @@
 			$desde = ($pagina-1) * $por_pagina;
 			$total_paginas = ceil($total_registro / $por_pagina);
 
-			$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE estatus = 1 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina");
+			$query = mysqli_query($conection,"SELECT * FROM seguimiento WHERE estatus = 1 AND practica=1 ORDER BY fecha_contacto DESC LIMIT $desde,$por_pagina");
 
 			// cierre de la conexión
 			mysqli_close($conection);

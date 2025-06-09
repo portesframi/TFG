@@ -26,11 +26,15 @@
 			$correo_instructor		= $_POST['correo_instructor'];
 			$telefono_instructor	= $_POST['telefono_instructor'];
 			$usuario_id 			= $_SESSION['idUser'];
+			$anexo1					= isset($_POST['anexo1']) ? 1 : 0;
+			$anexo2					= isset($_POST['anexo2']) ? 1 : 0;
+			$anexo3					= isset($_POST['anexo3']) ? 1 : 0;
+			$anexo5					= isset($_POST['anexo5']) ? 1 : 0;
 
 			$result = 0;
 
 			$sql_update = mysqli_query($conection,"UPDATE practica
-															SET empresa='$empresa', alumno='$alumno', distancia='$distancia', dedicacion='$dedicacion', tarea='$tarea', tipo_practica= '$tipo_practica', curso= '$curso',Formacion_de_practicas= '$Formacion_de_practicas', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', horas='$horas', horario='$horario', instructor='$instructor', dni_instructor='$dni_instructor',titulacion_instructor='$titulacion_instructor',correo_instructor='$correo_instructor', telefono_instructor='$telefono_instructor',usuario_id='$usuario_id'
+															SET empresa='$empresa', alumno='$alumno', distancia='$distancia', dedicacion='$dedicacion', tarea='$tarea', tipo_practica= '$tipo_practica', curso= '$curso',Formacion_de_practicas= '$Formacion_de_practicas', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', horas='$horas', horario='$horario', instructor='$instructor', dni_instructor='$dni_instructor',titulacion_instructor='$titulacion_instructor',correo_instructor='$correo_instructor', telefono_instructor='$telefono_instructor',usuario_id='$usuario_id',anexo1=$anexo1,anexo2=$anexo2,anexo3=$anexo3,anexo5=$anexo5 
 															WHERE idpractica= $idPractica ");
 
 			if($sql_update){
@@ -78,6 +82,10 @@
 			$titulacion_instructor = $data['titulacion_instructor'];
 			$correo_instructor = $data['correo_instructor'];
 			$telefono_instructor	 = $data['telefono_instructor'];
+			$anexo1	 = $data['anexo1'];
+			$anexo2	 = $data['anexo2'];
+			$anexo3	 = $data['anexo3'];
+			$anexo5	 = $data['anexo5'];
 			
 		}
 	}
@@ -120,7 +128,7 @@
 				</p>
 				<p>
 				<label for="tipo_practica">Tipo de práctica</label>
-					<select style="width:250px" name="tipo_practica" id="tipo_practica" 
+					<select style="width:250px" name="tipo_practica" id="tipo_practica"> 
 						<option value="" <?php if($tipo_practica == "") echo 'selected'; ?>></option>
 						<option value="FCT" <?php if($tipo_practica == "FCT") echo 'selected'; ?>>FCT</option>
 						<option value="DUAL" <?php if($tipo_practica == "DUAL") echo 'selected'; ?>>DUAL</option>
@@ -187,6 +195,16 @@
 				<label for="telefono_instructor">Teléfono del instructor</label>
 				<input type="number" size="25" name="telefono_instructor" id="telefono_instructor" placeholder="Teléfono del instructor" value="<?php echo $telefono_instructor; ?>">
 				</p>
+				<div class="wd100">
+					<label for="Anexo1">Anexo 1</label>
+					<input type="checkbox" name="anexo1" id="anexo_1" value="1"value="1" <?php if ($anexo1) echo 'checked'; ?>>
+					<label style="margin-left: 30px;" for="Anexo2">Anexo 2</label>
+					<input type="checkbox" name="anexo2" id="anexo_2" value="1" <?php if ($anexo2) echo 'checked'; ?>>
+					<label style="margin-left: 30px;" for="Anexo3">Anexo 3</label>
+					<input type="checkbox" name="anexo3" id="anexo_3" value="1" <?php if ($anexo3) echo 'checked'; ?>>
+					<label style="margin-left: 30px;" for="Anexo5">Anexo 5</label>
+					<input type="checkbox" name="anexo5" id="anexo_5" value="1" <?php if ($anexo5) echo 'checked'; ?>>
+				</div>
 
 				<input type="submit" value="Actualizar práctica" class="btn_save">
 
